@@ -133,7 +133,7 @@ fetch() {
     echo "    ➜ 📂 Apps directory: /usr/share/applications/"
     echo "    ➜ 📂 Theme directory: /home/$(whoami)/.local/share/icons/"
     echo "    ➜ 👤 User: $(whoami)"
-    echo "    ➜ 🖥️  Desktop: $XDG_CURRENT_DESKTOP"
+    echo "    ➜ 🖥️ Desktop: $XDG_CURRENT_DESKTOP"
 }
 
 main() {
