@@ -1,0 +1,13 @@
+#!/bin/bash
+
+main() {
+    if [[ "$@" == *"--say-hello"* ]] || [[ "$@" == *"-sh"* ]]; then
+        echo "Hello World!"
+    elif [[ "$@" == *"--help"* ]] || [[ "$@" == *"-h"* ]]; then
+        echo "Custom scripts go here"
+    else
+        echo "Type --help or -h to learn more"
+    fi
+}
+
+main "$@"

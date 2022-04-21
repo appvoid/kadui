@@ -1,0 +1,165 @@
+#!/bin/bash
+help() {
+    echo
+    echo '                       $$\   $$\  $$$$$$\  $$$$$$$\  $$\   $$\ $$$$$$\ 
+                       $$ | $$  |$$  __$$\ $$  __$$\ $$ |  $$ |\_$$  _|
+                       $$ |$$  / $$ /  $$ |$$ |  $$ |$$ |  $$ |  $$ |  
+                       $$$$$  /  $$$$$$$$ |$$ |  $$ |$$ |  $$ |  $$ |  
+                       $$  $$<   $$  __$$ |$$ |  $$ |$$ |  $$ |  $$ |  
+                       $$ |\$$\  $$ |  $$ |$$ |  $$ |$$ |  $$ |  $$ |  
+                       $$ | \$$\ $$ |  $$ |$$$$$$$  |\$$$$$$  |$$$$$$\ 
+                       \__|  \__|\__|  \__|\_______/  \______/ \______|
+                                                '
+    echo "Description: o"
+    echo "             |"
+    echo "             '-> KADUI is a CLI tool to manage custom desktop KDE icons easier and fast."
+    echo
+    echo "Usage: o"
+    echo "       |"
+    echo "       '-> [--list, -l] : lists all visible desktop app's name, command... (useful for external usage)"
+    echo "           [--list-human-readable, -hr] : same as above but more human readable"
+    echo "           [--list-name, -ln] : gets all app names in a minimal format"
+    echo "           [--app-dir, -d] : opens app's directory"
+    echo "           [--icons-dir, -d] : opens current theme icon's directory"
+    echo "           [--info, -i] : shows relevant information in a glance"
+    echo "           [--help, -h] : shows this help"
+    echo
+    echo
+    echo "                If you ❤️  this tool you can give a donation through PayPal:"
+    echo "            👉 https://www.paypal.com/donate/?hosted_button_id=CDZH8GJET9SNU"
+    echo
+    echo
+    echo "                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  "
+    echo "                           appvoid's kde app manager script, 2022    "
+    echo "                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  "
+}
+
+list() {
+    for i in $files ; do
+        #echo $i # This is the desktop where we get all data
+        displaystatus=$(cat "/usr/share/applications/$i" | grep "NoDisplay=true" -m 1 | head -1)
+        # test if we should display the file
+        if [[ $displaystatus == *"NoDisplay=true"* ]]; then
+            true
+        else
+        # otherwise we can show it
+            appname=$(cat "/usr/share/applications/$i" | grep "Name" -m 1 | head -1 | sed 's/Generic//' | sed 's/Name=//')
+            iconname=$(cat "/usr/share/applications/$i" | grep "Icon" -m 1 | head -1 | cut -c 6-)
+            # this ensure that there are not 'ghost' icon paths printing everywhere
+            if [ -z "$iconname" ]; then
+                true
+            else
+                echo "$appname:$(cat "/usr/share/applications/$i" | grep "Exec" -m 1 | head -1 | sed 's/Try//' | sed 's/Exec=//'):$iconspath/$iconname.svg"
+                let counter=$counter+1
+                echo
+            fi
+        fi
+    done
+}
+
+list_human_readable() {
+    for i in $files ; do
+        #echo $i # This is the desktop where we get all data
+        displaystatus=$(cat "/usr/share/applications/$i" | grep "NoDisplay=true" -m 1 | head -1)
+        # test if we should display the file
+        if [[ $displaystatus == *"NoDisplay=true"* ]]; then
+            true
+        else
+        # otherwise we can show it
+            appname=$(cat "/usr/share/applications/$i" | grep "Name" -m 1 | head -1 | sed 's/Generic//' | sed 's/Name=//')
+            iconname=$(cat "/usr/share/applications/$i" | grep "Icon" -m 1 | head -1 | cut -c 6-)
+            # this ensure that there are not 'ghost' icon paths printing everywhere
+            if [ -z "$iconname" ]; then
+                true
+            else
+                echo -----------------------------------------------------------------------------------------------
+                echo "| 💬 Name:    $appname"
+                echo "| 💻 Command: $(cat "/usr/share/applications/$i" | grep "Exec" -m 1 | head -1 | sed 's/Try//' | sed 's/Exec=//')"
+                echo "| 🌌 Icon:    $iconname.svg"
+                let counter=$counter+1
+                echo -----------------------------------------------------------------------------------------------
+            fi
+        fi
+    done
+}
+
+list_name() {
+    for i in $files ; do
+        #echo $i # This is the desktop where we get all data
+        displaystatus=$(cat "/usr/share/applications/$i" | grep "NoDisplay=true" -m 1 | head -1)
+        # test if we should display the file
+        if [[ $displaystatus == *"NoDisplay=true"* ]]; then
+            true
+        else
+        # otherwise we can show it
+            appname=$(cat "/usr/share/applications/$i" | grep "Name" -m 1 | head -1 | sed 's/Generic//' | sed 's/Name=//')
+            iconname=$(cat "/usr/share/applications/$i" | grep "Icon" -m 1 | head -1 | cut -c 6-)
+            # this ensure that there are not 'ghost' icon paths printing everywhere
+            if [ -z "$iconname" ]; then
+                true
+            else
+                echo "$appname" 
+            fi
+        fi
+    done
+}
+
+list_quiet() {
+    for i in $files ; do
+        #echo $i # This is the desktop where we get all data
+        displaystatus=$(cat "/usr/share/applications/$i" | grep "NoDisplay=true" -m 1 | head -1)
+        # test if we should display the file
+        if [[ $displaystatus == *"NoDisplay=true"* ]]; then
+            true
+        else
+        # otherwise we can show it
+            iconname=$(cat "/usr/share/applications/$i" | grep "Icon" -m 1 | head -1 | cut -c 6-)
+            # this ensure that there are not 'ghost' icon paths printing everywhere
+            if [ -z "$iconname" ]; then
+                true
+            else
+                let counter=$counter+1
+            fi
+        fi
+    done
+    echo "➜ ☑️  Done"
+    echo "    ➜ 📦 Desktop Apps: ($counter)"
+}
+
+fetch() {
+    echo "➜ ⏳ Fetching..."
+    list_quiet &&
+    echo "    ➜ 🌌 Icon's theme: $icontheme"
+    echo "    ➜ 📂 Apps directory: /usr/share/applications/"
+    echo "    ➜ 📂 Theme directory: /home/$(whoami)/.local/share/icons/"
+    echo "    ➜ 👤 User: $(whoami)"
+    echo "    ➜ 🖥️  Desktop: $XDG_CURRENT_DESKTOP"
+}
+
+main() {
+    # pre caching variables
+    icontheme=$(cat ~/.config/kdeglobals | grep "Theme" | cut -c 7-)
+    iconspath=$(echo "/home/$(whoami)/.local/share/icons/$icontheme/apps/scalable")
+    files=$(ls /usr/share/applications/) # user's app desktop files location
+    counter=0
+    # conditionals
+    if [[ "$@" == *"--list"* ]] || [[ "$@" == "-l" ]]; then
+        list $icontheme $iconspath $files $counter
+    elif [[ "$@" == *"--list-human-readable"* ]] || [[ "$@" == "-hr" ]]; then
+        list_human_readable $icontheme $iconspath $files $counter
+    elif [[ "$@" == *"--list-name"* ]] || [[ "$@" == "-ln" ]]; then
+        list_name $icontheme $iconspath $files $counter
+    elif [[ "$@" == *"--app-dir"* ]] || [[ "$@" == "-d" ]]; then
+        xdg-open /usr/share/applications/ 2> /dev/null & disown
+    elif [[ "$@" == *"--info"* ]] || [[ "$@" == "-i" ]]; then
+        fetch $icontheme $iconspath $files
+    elif [[ "$@" == *"--icons-dir"* ]] || [[ "$@" == "-di" ]]; then
+        xdg-open /home/$(whoami)/.local/share/icons/$icontheme/apps/scalable/ 2> /dev/null & disown
+    elif [[ "$@" == *"--help"* ]] || [[ "$@" == "-h" ]]; then
+        help
+    else
+        echo "Type --help or -h to learn more"
+    fi
+}
+
+main "$@"
