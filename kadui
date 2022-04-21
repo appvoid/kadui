@@ -17,7 +17,7 @@ help() {
     echo "Usage: o"
     echo "       |"
     echo "       '-> [--list, -l] : lists all visible desktop app's name, command... (useful for external usage)"
-    echo "           [--list-human-readable, -hr] : same as above but more human readable"
+    echo "           [--human-readable, -hr] : same as above but more human readable"
     echo "           [--list-name, -ln] : gets all app names in a minimal format"
     echo "           [--app-dir, -d] : opens app's directory"
     echo "           [--icons-dir, -d] : opens current theme icon's directory"
@@ -145,7 +145,7 @@ main() {
     # conditionals
     if [[ "$@" == *"--list"* ]] || [[ "$@" == "-l" ]]; then
         list $icontheme $iconspath $files $counter
-    elif [[ "$@" == *"--list-human-readable"* ]] || [[ "$@" == "-hr" ]]; then
+    elif [[ "$@" == *"--human-readable"* ]] || [[ "$@" == "-hr" ]]; then
         list_human_readable $icontheme $iconspath $files $counter
     elif [[ "$@" == *"--list-name"* ]] || [[ "$@" == "-ln" ]]; then
         list_name $icontheme $iconspath $files $counter
