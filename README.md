@@ -3,9 +3,9 @@ KADUI is a CLI tool to manage custom desktop KDE icons easier and fast. It's jus
 <br>
 
 ### Quick Start
-`chmod +x kadui`
-
-`./kadui --list-human-readable`
+`git clone https://github.com/appvoid/kadui.git && cd kadui && chmod +x kadui && ./kadui --list-human-readable`
+`
+This will download kadui script and show an user friendly list of desktop apps available
 
 ***
 
